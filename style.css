@@ -7,11 +7,17 @@ body{
 
 .ex-row{
     display: flex;
-    width: 20rem;
+    width: 30rem;
     justify-content: space-between;
 }
 .total-div{
     display: flex;
-    width: 20rem;
+    width: 23rem;
+    justify-content: space-between;
+}
+.action-div{
+    width: 10rem;
+    display: flex;
+    padding: 0.5rem;
     justify-content: space-between;
 }

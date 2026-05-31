@@ -6,11 +6,20 @@ const addBtn=document.querySelector(".add-btn");
 
 let expenceArray=[];
 
+function totalspend(){
+        let total=0;
+        expenceArray.forEach(expence =>{
+          total =total + Number(expence.amount);
+        });
+        const totalAmount=document.querySelector("#total-amount");
+        totalAmount.innerHTML="&#8377; "+total;
+}
+
 function addExpence(){
         const exName=expenceName.value;
         const exAmount=expenceAmount.value;
 
-        if(exName !== ""){
+        if(exName !== "" && exAmount !==""){
             let expence = {
                 id:Date.now(),
                 title:exName,
@@ -18,27 +27,48 @@ function addExpence(){
             }
             expenceArray.push(expence);
             createList(exName,exAmount);
+            totalspend();
             expenceName.value="";
             expenceAmount.value="";
             console.log(expenceArray);
+        }
+        else{
+                let warn=alert("Enter some values"); 
         }
 }
 
 
 function createList(name,amount){
         const li= document.createElement("li");
-        const span =document.createElement("span");
+        const span1 =document.createElement("span");
+        const span2=document.createElement("span");
         const p1=document.createElement("p");
         const p2=document.createElement("p");
+        const delBtn=document.createElement("button");
+        const editBtn=document.createElement("button");
 
-        span.className="ex-row";
+        span1.className="ex-row";
+        span2.className="action-div";
 
         p1.innerHTML=name;
-        p2.innerHTML=amount;
-
-        span.appendChild(p1);
-        span.appendChild(p2);
-        li.appendChild(span);
+        p2.innerHTML="&#8377; "+amount;
+        delBtn.innerText="Delete";
+        delBtn.className="del-btn";
+        editBtn.innerText="Edit";
+        editBtn.className="edit-btn";
+        
+        span2.appendChild(p2);
+        span2.appendChild(delBtn);
+        span2.appendChild(editBtn);
+        span1.appendChild(p1);
+        span1.appendChild(span2);
+        li.appendChild(span1);
         mainList.appendChild(li);
 }
+function delExpence(){
+
+}
+
+
+
 addBtn.addEventListener('click',addExpence);
