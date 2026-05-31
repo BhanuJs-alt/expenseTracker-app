@@ -4,15 +4,23 @@ const expenceName=document.querySelector(".ex-name");
 const expenceAmount=document.querySelector(".ex-amount");
 const addBtn=document.querySelector(".add-btn");
 
+let expenceArray=[];
 
 function addExpence(){
         const exName=expenceName.value;
         const exAmount=expenceAmount.value;
 
         if(exName !== ""){
+            let expence = {
+                id:Date.now(),
+                title:exName,
+                amount:exAmount
+            }
+            expenceArray.push(expence);
             createList(exName,exAmount);
             expenceName.value="";
             expenceAmount.value="";
+            console.log(expenceArray);
         }
 }
 
