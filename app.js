@@ -5,6 +5,7 @@ const expenceAmount=document.querySelector(".ex-amount");
 const addBtn=document.querySelector(".add-btn");
 
 let expenceArray=[];
+loadExpence();
 
 function totalspend(){//function for adding all expences
         let total=0;
@@ -28,6 +29,7 @@ function addExpence(){//function for adding expence in list
             expenceArray.push(expence);
             createList(expence);
             totalspend();
+            saveExpence();
             expenceName.value="";
             expenceAmount.value="";
             console.log(expenceArray);
@@ -76,6 +78,7 @@ function createList(expence){//function for creating list
 
                         p1.innerHTML=expence.title;
                         p2.innerHTML="&#8377; "+expence.amount;
+                        saveExpence();
                         totalspend();
                 }
         });
@@ -92,10 +95,28 @@ function delExpence(event){//function for deleting expence
         liElement.remove();
 
         totalspend();
+        saveExpence();
         console.log(expenceArray);
        }
 }
 
+function saveExpence(){//funtion to save expences in localStorage
+        localStorage.setItem("allExpence",JSON.stringify(expenceArray));
+}
+
+function loadExpence(){
+        let loadEx=localStorage.getItem("allExpence");
+
+        if(loadEx){
+          let parseEx=JSON.parse(loadEx);//parsing data 
+
+          expenceArray=parseEx;
+          expenceArray.forEach(expence=>{//creating list for each expence
+                createList(expence);
+                totalspend();
+          });
+        }
+}
 
 mainList.addEventListener('click',delExpence);
 addBtn.addEventListener('click',addExpence);
