@@ -6,7 +6,7 @@ const addBtn=document.querySelector(".add-btn");
 
 let expenceArray=[];
 
-function totalspend(){
+function totalspend(){//function for adding all expences
         let total=0;
         expenceArray.forEach(expence =>{
           total =total + Number(expence.amount);
@@ -15,7 +15,7 @@ function totalspend(){
         totalAmount.innerHTML="&#8377; "+total;
 }
 
-function addExpence(){
+function addExpence(){//function for adding expence in list
         const exName=expenceName.value;
         const exAmount=expenceAmount.value;
 
@@ -38,7 +38,7 @@ function addExpence(){
 }
 
 
-function createList(expence){
+function createList(expence){//function for creating list
         const li= document.createElement("li");
         li.dataset.id=expence.id;
         const span1 =document.createElement("span");
@@ -65,9 +65,23 @@ function createList(expence){
         span1.appendChild(span2);
         li.appendChild(span1);
         mainList.appendChild(li);
+
+        editBtn.addEventListener('click',()=>{
+                const newTitle=prompt("Enter new expence",expence.title);
+                const newAmount=prompt("Enter new amount",expence.amount);
+
+                if(newTitle !== null && newTitle.trim() !== ''){
+                        expence.title=newTitle;
+                        expence.amount=newAmount;
+
+                        p1.innerHTML=expence.title;
+                        p2.innerHTML="&#8377; "+expence.amount;
+                        totalspend();
+                }
+        });
 }
 
-function delExpence(event){
+function delExpence(event){//function for deleting expence
 
      if( event.target.classList.contains("del-btn")){
           
