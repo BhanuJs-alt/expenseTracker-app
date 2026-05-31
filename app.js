@@ -26,7 +26,7 @@ function addExpence(){
                 amount:exAmount
             }
             expenceArray.push(expence);
-            createList(exName,exAmount);
+            createList(expence);
             totalspend();
             expenceName.value="";
             expenceAmount.value="";
@@ -38,8 +38,9 @@ function addExpence(){
 }
 
 
-function createList(name,amount){
+function createList(expence){
         const li= document.createElement("li");
+        li.dataset.id=expence.id;
         const span1 =document.createElement("span");
         const span2=document.createElement("span");
         const p1=document.createElement("p");
@@ -50,8 +51,8 @@ function createList(name,amount){
         span1.className="ex-row";
         span2.className="action-div";
 
-        p1.innerHTML=name;
-        p2.innerHTML="&#8377; "+amount;
+        p1.innerHTML=expence.title;
+        p2.innerHTML="&#8377; "+expence.amount;
         delBtn.innerText="Delete";
         delBtn.className="del-btn";
         editBtn.innerText="Edit";
@@ -65,10 +66,22 @@ function createList(name,amount){
         li.appendChild(span1);
         mainList.appendChild(li);
 }
-function delExpence(){
 
+function delExpence(event){
+
+     if( event.target.classList.contains("del-btn")){
+          
+        const liElement=event.target.closest("li");
+        const expenceId=liElement.dataset.id;
+        
+        expenceArray=expenceArray.filter(expence => expence.id != expenceId);
+        liElement.remove();
+
+        totalspend();
+        console.log(expenceArray);
+       }
 }
 
 
-
+mainList.addEventListener('click',delExpence);
 addBtn.addEventListener('click',addExpence);
