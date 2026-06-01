@@ -1,38 +1,42 @@
 console.log("js is connected");
 const mainList=document.querySelector(".main-list");
-const expenceName=document.querySelector(".ex-name");
-const expenceAmount=document.querySelector(".ex-amount");
+const expenseName=document.querySelector(".ex-name");
+const expenseAmount=document.querySelector(".ex-amount");
 const addBtn=document.querySelector(".add-btn");
+const expenseCategory=document.querySelector("#ex-category");
+const searchBtn=document.querySelector(".search-btn");
 
-let expenceArray=[];
-loadExpence();
+let expenseArray=[];
+loadExpense();
 
-function totalspend(){//function for adding all expences
+function totalspend(arr){//function for adding all expences
         let total=0;
-        expenceArray.forEach(expence =>{
-          total =total + Number(expence.amount);
+        arr.forEach(expense =>{
+          total =total + Number(expense.amount);
         });
         const totalAmount=document.querySelector("#total-amount");
         totalAmount.innerHTML="&#8377; "+total;
 }
 
-function addExpence(){//function for adding expence in list
-        const exName=expenceName.value;
-        const exAmount=expenceAmount.value;
+function addExpense(){//function for adding expence in list
+        const exName=expenseName.value.trim();
+        const exAmount=expenseAmount.value;
+        const exCategory=expenseCategory.value;
 
         if(exName !== "" && exAmount !==""){
-            let expence = {
+            let expense = {
                 id:Date.now(),
                 title:exName,
-                amount:exAmount
+                amount:exAmount,
+                category:exCategory
             }
-            expenceArray.push(expence);
-            createList(expence);
-            totalspend();
-            saveExpence();
-            expenceName.value="";
-            expenceAmount.value="";
-            console.log(expenceArray);
+            expenseArray.push(expense);
+            createList(expense);
+            totalspend(expenseArray);
+            saveExpense();
+            expenseName.value="";
+            expenseAmount.value="";
+            console.log(expenseArray);
         }
         else{
                 let warn=alert("Enter some values"); 
@@ -40,83 +44,108 @@ function addExpence(){//function for adding expence in list
 }
 
 
-function createList(expence){//function for creating list
+function createList(expense){//function for creating list
         const li= document.createElement("li");
-        li.dataset.id=expence.id;
+        li.dataset.id=expense.id;
         const span1 =document.createElement("span");
         const span2=document.createElement("span");
         const p1=document.createElement("p");
         const p2=document.createElement("p");
         const delBtn=document.createElement("button");
         const editBtn=document.createElement("button");
+        const category=document.createElement("small");
 
         span1.className="ex-row";
         span2.className="action-div";
 
-        p1.innerHTML=expence.title;
-        p2.innerHTML="&#8377; "+expence.amount;
+        p1.innerHTML=expense.title;
+        p2.innerHTML="&#8377; "+expense.amount;
         delBtn.innerText="Delete";
         delBtn.className="del-btn";
         editBtn.innerText="Edit";
         editBtn.className="edit-btn";
+        category.textContent=expense.category;
         
         span2.appendChild(p2);
         span2.appendChild(delBtn);
         span2.appendChild(editBtn);
         span1.appendChild(p1);
+        span1.appendChild(category);
         span1.appendChild(span2);
         li.appendChild(span1);
         mainList.appendChild(li);
 
         editBtn.addEventListener('click',()=>{
-                const newTitle=prompt("Enter new expence",expence.title);
-                const newAmount=prompt("Enter new amount",expence.amount);
+                const newTitle=prompt("Enter new expence",expense.title);
+                const newAmount=prompt("Enter new amount",expense.amount);
 
                 if(newTitle !== null && newTitle.trim() !== ''){
-                        expence.title=newTitle;
-                        expence.amount=newAmount;
+                        expense.title=newTitle;
+                        expense.amount=newAmount;
 
-                        p1.innerHTML=expence.title;
-                        p2.innerHTML="&#8377; "+expence.amount;
-                        saveExpence();
-                        totalspend();
+                        p1.innerHTML=expense.title;
+                        p2.innerHTML="&#8377; "+expense.amount;
+                        saveExpense();
+                        totalspend(expenseArray);
                 }
         });
 }
 
-function delExpence(event){//function for deleting expence
+function delExpense(event){//function for deleting expence
 
      if( event.target.classList.contains("del-btn")){
           
         const liElement=event.target.closest("li");
-        const expenceId=liElement.dataset.id;
+        const expenseId=liElement.dataset.id;
         
-        expenceArray=expenceArray.filter(expence => expence.id != expenceId);
+        expenseArray=expenseArray.filter(expense => expense.id != expenseId);
         liElement.remove();
 
-        totalspend();
-        saveExpence();
-        console.log(expenceArray);
+        totalspend(expenseArray);
+        saveExpense();
+        console.log(expenseArray);
        }
 }
 
-function saveExpence(){//funtion to save expences in localStorage
-        localStorage.setItem("allExpence",JSON.stringify(expenceArray));
+function saveExpense(){//funtion to save expences in localStorage
+        localStorage.setItem("allExpense",JSON.stringify(expenseArray));
 }
 
-function loadExpence(){
-        let loadEx=localStorage.getItem("allExpence");
+function loadExpense(){
+        let loadEx=localStorage.getItem("allExpense");
 
         if(loadEx){
           let parseEx=JSON.parse(loadEx);//parsing data 
 
-          expenceArray=parseEx;
-          expenceArray.forEach(expence=>{//creating list for each expence
-                createList(expence);
-                totalspend();
+          expenseArray=parseEx;
+          expenseArray.forEach(expense=>{//creating list for each expence
+                createList(expense);
+              
           });
+          totalspend(expenseArray);
+        }
+} 
+
+function search(){//function for filtering by category
+        const searchCategory=expenseCategory.value;//store search category
+        if(searchCategory=="All"){
+            renderSearch(expenseArray);
+            totalspend(expenseArray);
+        }
+        else
+        {
+          const filtered = expenseArray.filter(expense => expense.category === searchCategory);//filter search
+          console.log(filtered);
+          renderSearch(filtered);
+          totalspend(filtered);
         }
 }
 
-mainList.addEventListener('click',delExpence);
-addBtn.addEventListener('click',addExpence);
+function renderSearch(arr){//helper function for rendering searched category
+        mainList.innerHTML="";
+        arr.forEach(x=>createList(x));
+}
+
+searchBtn.addEventListener('click',search);
+mainList.addEventListener('click',delExpense);
+addBtn.addEventListener('click',addExpense);

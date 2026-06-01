@@ -12,19 +12,44 @@
 <body>
     <div class="main">
      <h1>Expense Tracker</h1>
-     <div class="input-expence">
-       <input type="text" placeholder="Expence" class="ex-name">
-       <input type="number" name="" id="" placeholder="Enter amount" class="ex-amount">
-       <button class="add-btn">ADD-EXPENCE</button>
-     </div>
+     <div class="input-expense">
+
+         <div class="ex-title">
+          <label for="">Enter your expense title:</label>
+          <input type="text" placeholder="Expense" class="ex-name">
+         </div>
+
+        <div class="amount-div">
+          <label for="">Enter amount:</label>
+          <input type="number" name="" id="" placeholder="Enter amount" class="ex-amount">
+        </div>
+
+        <div class="category-div">
+        <label for="cars">Choose your expense category:</label>
+
+            <select name="" id="ex-category">
+              <option value="All">All transcation</option>
+              <option value="Food">Food</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Transport">Transport</option>
+              <option value="Rent">Rent</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Miscellaneous">Miscellaneous</option>
+            </select>
+       </div>
+     </div> 
+     
+     <button class="add-btn">ADD EXPENSE</button>
+     <button class="search-btn">SEARCH BY CATEGORY</button>
+
      <div class="list-box"> 
         <ul class="main-list">
             <li>
             <span class="ex-row">
-               <p class="p1">food</p>
-
+               <p class="p1">Rapido</p>
+                <small>Transport</small>
               <span class="action-div">
-                <p class="p2">600</p>
+                <p class="p2">&#8377; 129</p>
                 <button class="del-btn">delete</button>
                 <button class="edit-btn">edit</button>
               </span>
